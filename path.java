@@ -8,17 +8,20 @@ import Geom.Point3D;
 public class path {
 	// arraylist to store the locations
 	ArrayList <Point3D> path = new ArrayList();
+	ArrayList timedelay = new ArrayList();
+
 	// MyCoords object to use the method "distanse3d"
 	public MyCoords object;
-	//counter to know how many locations we have
-	public int counter=0;
+	//counter to know how many fruit locations we have
+	public int counter=0; 
 	//add method
-	public void add(Point3D x) {
+	public void add(Point3D x,String y) {
 		path.add(x);
 		counter++;
+		timedelay.add(y);
 	}
-	// this method store the locations in array
 	
+	// this method store the locations in array
 	public Point3D[] toarray() {
 		// this array is the result
 		Point3D s[]=new Point3D [counter];
@@ -30,12 +33,12 @@ public class path {
 		while (here.hasNext()) {
 			s[i++]=here.next();
 		}
-		//return results
+		// return results
 		return s;
 	}
 	// this method calculate the length of the path
 	// note: the length is not the shortest possible, its only
-	// the length between the points according to the time they store in the array
+	// the length between the points according to the order they store in the array
 	public double length() {
 		// variable to return the results
 		double result=0;
