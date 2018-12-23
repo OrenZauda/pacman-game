@@ -6,21 +6,22 @@ import java.io.FileReader;
 public class pacman {
 
 	public Point3D location;
-	public double mps;
+	public double mps=1;
 	public double Eatradius;
-	public int z;//id
-	public File pictrue = new File("C:\\Users\\orenz\\Desktop\\ώώϊιχιδ ηγωδ\\pacman 2.png");
+	public int id;//id
+	public double rate=0;
+	public File pictrue = new File("C:\\Users\\orenz\\Desktop\\β€β€ΧªΧ™Χ§Χ™Χ” Χ—Χ“Χ©Χ”\\pacman 2.png");
 
 	public pacman(Point3D x, double y,double radius,int i) {
 		location=x;
-		mps=y;
+		mps=y; 
 		Eatradius=radius;
-		z=i;
+		id=i; 
 	}
 
 	public String toString() {
 		String result;
-		result= "PACMAN "+z+" in location "+location.toString()+" with eat radius "+Eatradius;
+		result= "PACMAN "+id+" in location "+location.toString()+" with eat radius "+Eatradius;
 		return result;
 	}
 
