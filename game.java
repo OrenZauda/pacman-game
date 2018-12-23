@@ -10,16 +10,21 @@ import Geom.Point3D;
 import java.util.Iterator;
 import java.io.FileNotFoundException;
 
-public class game {
+public class game extends ArrayList {
+	@Override
+	public String toString() {
+		return "game [pacmans=" + pacmans + ", fruits=" + fruits + "]";
+	}
 	//arraylist to store pamans and fruits
 	public ArrayList <pacman> pacmans = new ArrayList();
 	public ArrayList <fruit> fruits = new ArrayList();
 	public int fruitcounter=0;
-	public int pacmancounter=0;
+	public int pacmancounter=0; 
 
 	//simple constructor
 	public game() {	
 	}
+
 	//add method
 	public void addfruit(fruit x) {
 		fruits.add(x);
@@ -30,7 +35,29 @@ public class game {
 		pacmans.add(x);
 		pacmancounter++;
 	}
-	
+	// this method convers arraylist to array
+	public Point3D[] ptoarray(ArrayList x) {
+		Iterator <pacman> here = pacmans.iterator();
+		Point3D[] results= new Point3D[x.size()];
+		int i=0;
+		while(here.hasNext()) {
+			pacman temp=here.next();
+			results[i++]=temp.location;
+		}
+		return results;
+	}
+	public Point3D[] ftoarray(ArrayList x) {
+		Iterator <fruit> here = fruits.iterator();
+		Point3D[] results= new Point3D[x.size()];
+		int i=0;
+		while(here.hasNext()) {
+			fruit temp=here.next();
+			results[i++]=temp.location;
+		}
+		return results;
+	}
+
+
 	//construcot use csv file to create a game!
 
 	public game(File csvfile) throws IOException {
@@ -85,7 +112,7 @@ public class game {
 			pacman temp= here.next();
 			result+="P,"+i+","+temp.location.getx()+","+temp.location.gety()+","
 					+temp.location.getz()+","+temp.mps+","+temp.Eatradius+"/n";
-		// increase i which represent the id
+			// increase i which represent the id
 			i++;
 		}
 		// iterator to go thru the fruit array
@@ -98,8 +125,8 @@ public class game {
 			// increase i which represent the id
 			i++;
 		}
-		File csvloc= new File(s);
-		
+		File csvloc= new File("c://temp//pacmangame.csv");
+
 		PrintWriter pw = null;
 		try 
 		{
@@ -113,24 +140,23 @@ public class game {
 		pw.write(result);
 		pw.close();
 		System.out.println("done!");
-//		//save the file in location "s", the user gave us
-//		try (PrintWriter out = new PrintWriter(s)) {
-//			out.println(result);
-//		}
+		//		//save the file in location "s", the user gave us
+		//		try (PrintWriter out = new PrintWriter(s)) {
+		//			out.println(result);
+		//		}
 
 	}
 	public static void main(String[] args) throws IOException {
 
-//////////// checking tocsv method//////////////////////////
-       game da = new game();
-       Point3D x= new Point3D(1,2,3);
-       Point3D y= new Point3D(1,2,3);
-       pacman a=new pacman(x,1,1,1);
-       
-       fruit b= new fruit(y,2,2);
-       
+		//////////// checking tocsv method//////////////////////////
+		game da = new game();
+		Point3D x= new Point3D(1,2,3);
+		Point3D y= new Point3D(1,2,3);
+		pacman a=new pacman(x,1,1,1);
+		fruit b= new fruit(y,2,2);
 
-		
-		
+
+
+
 	}
 }
