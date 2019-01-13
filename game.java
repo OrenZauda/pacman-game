@@ -8,16 +8,24 @@ import java.io.PrintWriter;
 import java.io.BufferedReader;
 import Geom.Point3D;
 import java.util.Iterator;
+
+import javax.swing.ImageIcon;
+
 import java.io.FileNotFoundException;
 
 public class game extends ArrayList {
 	@Override
 	public String toString() {
-		return "game [pacmans=" + pacmans + ", fruits=" + fruits + "]";
+		return "game [pacmans=" + pacmans + ", fruits=" + fruits + '\n'
+				+ " boxes "+boxes+" ghosts "+ ghosts;
 	}
 	//arraylist to store pamans and fruits
 	public ArrayList <pacman> pacmans = new ArrayList();
 	public ArrayList <fruit> fruits = new ArrayList();
+	public ArrayList <ghost> ghosts = new ArrayList();
+	public ArrayList <box> boxes = new ArrayList();
+	pacman myplayer = new pacman();
+
 	public int fruitcounter=0;
 	public int pacmancounter=0; 
 
@@ -57,7 +65,14 @@ public class game extends ArrayList {
 		return results;
 	}
 
-
+	public void setmyplayer(pacman p) {
+		myplayer.location.setAlt( p.location.x());
+		myplayer.location.setLon( p.location.y());
+		myplayer.Eatradius=p.Eatradius;
+		myplayer.id=p.id;
+		myplayer.mps=p.mps;
+		myplayer.icon=new ImageIcon("C:\\temp\\rick.png");
+	}
 	//construcot use csv file to create a game!
 
 	public game(File csvfile) throws IOException {
@@ -77,7 +92,8 @@ public class game extends ArrayList {
 			double lon=Double.parseDouble(column[3]);
 			double alt=Double.parseDouble(column[4]);
 			double spdwt= Double.parseDouble(column[5]);
-
+            System.out.println(lat);
+            System.out.println(lon);
 			//if the current line represents pacman, create proper pacman 
 			if(type.equals("P")) {
 				double radius= Double.parseDouble(column[6]);
@@ -92,6 +108,28 @@ public class game extends ArrayList {
 				fruits.add(temp);
 
 			}
+			//if the current line represents box, create proper box 
+
+			if(type.equals("B")) {
+				box temp= new box();
+				temp.location1=new Point3D(lat,lon,0);
+				temp.location2=new Point3D(Double.parseDouble(column[5]),Double.parseDouble(column[6]));
+
+				//add the fruit to the array
+				boxes.add(temp);
+
+			}
+			if(type.equals("G")) {
+				double radius= Double.parseDouble(column[6]);
+				ghost temp= new ghost();
+				temp.location=new Point3D(lat,lon,0);
+				temp.Eatradius=radius;
+				temp.mps=spdwt;
+				//add the pacman to the array
+				ghosts.add(temp);
+			}
+
+
 			// go to the next line and repeat adding items
 			line="";
 			line=read.readLine();
@@ -103,7 +141,7 @@ public class game extends ArrayList {
 	// function which cultivate csv file from our game
 	public void tocsv(String s) throws IOException {
 		//string to store the result
-		String result="Type,id,lat,lon,alt,speed/weight,radius,"+pacmancounter+","+fruitcounter+"/n";
+		String result="Type,id,lat,lon,alt,speed/weight,radius,"+pacmancounter+","+fruitcounter+'\n';
 		// iterator to go thru the pacman array
 		Iterator <pacman> here = pacmans.iterator();
 		int i=0;
@@ -111,7 +149,7 @@ public class game extends ArrayList {
 		while(here.hasNext()) {
 			pacman temp= here.next();
 			result+="P,"+i+","+temp.location.getx()+","+temp.location.gety()+","
-					+temp.location.getz()+","+temp.mps+","+temp.Eatradius+"/n";
+					+temp.location.getz()+","+temp.mps+","+temp.Eatradius+'\n';
 			// increase i which represent the id
 			i++;
 		}
@@ -121,16 +159,14 @@ public class game extends ArrayList {
 		while(there.hasNext()) {
 			fruit temp= there.next();
 			result+="F,"+i+","+temp.location.getx()+","+temp.location.gety()+","
-					+temp.location.getz()+","+temp.weight+"/n";
+					+temp.location.getz()+","+temp.weight+'\n';
 			// increase i which represent the id
 			i++;
 		}
-		File csvloc= new File("c://temp//pacmangame.csv");
-
 		PrintWriter pw = null;
 		try 
 		{
-			pw = new PrintWriter(new File("c://temp//pacmangame.csv"));
+			pw = new PrintWriter(new File(s));
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -149,14 +185,15 @@ public class game extends ArrayList {
 	public static void main(String[] args) throws IOException {
 
 		//////////// checking tocsv method//////////////////////////
-		game da = new game();
-		Point3D x= new Point3D(1,2,3);
-		Point3D y= new Point3D(1,2,3);
-		pacman a=new pacman(x,1,1,1);
-		fruit b= new fruit(y,2,2);
-
-
-
+//		game da = new game();
+//		Point3D x= new Point3D(1,2,3);
+//		Point3D y= new Point3D(1,2,3);
+//		pacman a=new pacman(x,1,1,1);
+//		fruit b= new fruit(y,2,2);
+//		da.fruits.add(b);
+//		da.pacmans.add(a);
+//        da.tocsv("C:\\temp\\a.csv");
+     	game da = new game(new File("C:\\Users\\orenz\\Desktop\\EX4\\Ex4_OOP\\data\\Ex4_OOP_example8.csv"));
 
 	}
 }
